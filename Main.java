@@ -24,6 +24,8 @@ public class Main {
     private static int solutionValue;;
 
     public static void main(String[] args) {
+        long startTime = System.currentTimeMillis();
+
         // Initialize the solution state variables
         currentSolution = new boolean[values.length];
         bestSolution = new boolean[values.length];
@@ -31,7 +33,6 @@ public class Main {
         currentValue = 0;
         bestValue = 0; // new OFV gibi
         solutionValue = 0;
-
         // Initialize the random number generator
         Random random = new Random();
 
@@ -95,6 +96,10 @@ public class Main {
         // Print the best solution found
         System.out.println("Best Solution: " + Arrays.toString(bestSolution));
         System.out.println("Best Value: " + bestValue);
+        System.out.println("Differences between temperatures: " + (MAX_TEMPERATURE - currentTemperature));
+        long endTime = System.currentTimeMillis();
+        long executionTime = endTime - startTime;
+        System.out.println("Working time: " + executionTime + " ms");
     }
 
     // Helper method to calculate the fitness value of a solution
