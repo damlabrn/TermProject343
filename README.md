@@ -67,3 +67,11 @@ If you are using PyCharm, follow this YouTube video:
 https://www.youtube.com/watch?v=egpbzk5u0xA
 
 After cloning the repository, don’t forget to push it to the Git, so that we can see your term project.
+
+Question that you need to answer is:
+1- How does the execution time change when cooling rate increased? Report it by running the
+same algorithm for the given dataset.
+2- How does the execution time and solution quality change when the difference between
+starting temperature and stopping temperature is increased? Report it by running the same
+algorithm for the given datasets.
+
