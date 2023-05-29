@@ -79,16 +79,15 @@ public class Main {
 
             double probability = calculateAcceptanceProbability(currentValue, solutionValue, currentTemperature);
 
-            if (currentValue < solutionValue) { // Better and Accept
-                if (probability == 1) { // Current OFV > Solution OFV
+            if (currentValue < solutionValue) {
+                if (probability == 1) {
                     bestValue = solutionValue;
 
                     for (int i = 0; i < solutionSol.length; i++) {
                         bestSolution[i] = solutionSol[i];
                     }
 
-                } // Not Better
-                else { // Current OFV < Solution OFV
+                } else {
                     Double randomNumber = random.nextDouble();
 
                     if (probability > randomNumber) { // Accept
