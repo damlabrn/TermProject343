@@ -68,7 +68,9 @@ https://www.youtube.com/watch?v=egpbzk5u0xA
 
 After cloning the repository, don’t forget to push it to the Git, so that we can see your term project.
 
-Question that you need to answer is:
+First we initialize two new variables called boolean array solutionSol and integer solutionValue at the top of the main method.
+Then in in main method we set them to 0 to complete initialization and we create currentTemperature to hold MAX_TEMPERATURE’s value. After we fill the currentSolution by randomly to set our entering solution. Then we calculate olur  currentValue by using calculateValue method. We put currentSolution’s values to bestSolution array to consider that initial solution may be the best solution. Later we want to determine our next feasible solution one by one and randomly again if our temperature value is larger than 0. These calculations repeat until we found our best value. Below that we calculate the probability that corresponds to Metropolis criterion. If our neighbour function is larger, just take it regardless of criterion. Else that if the calculated metropolis value for that function is bigger than the newly founded random we take that, if not we skip. After all iterations, we calculate our new currentTemperature by multiplying itself with cooling rate. Beneath that, we report the values that we find. In the last two method we calculate whether the new solution is feasible or not and calculate our Criterion mathematically.
+
 1- How does the execution time change when cooling rate increased? Report it by running the same algorithm for the given dataset.
 ```bash
 Cooling rate - Execution Time
@@ -86,13 +88,15 @@ As the cooling rate increased, the execution time increased. However, there may 
 ```bash
 Difference between starting temperature and stopping temperature - Best Value - Execution Time
 10000 - 1391 - 9 ms
-10000
-10000
-100000
-100000
-100000
-1000000
-1000000
-1000000
+10000 - 1399 - 11 ms
+10000 - 1416 - 42 ms
+
+100000 - 1383 - 10 ms
+100000 - 1449 - 35 ms
+100000 - 1412 - 38 ms
+
+1000000 - 1385 - 8 ms
+1000000 - 1377 - 50 ms
+1000000 - 1423 - 41 ms
 ```
 When we do our experiments, we can observe a consistent picture when it is worth 10000. It seems that the duration tends to increase as the best value increases. But stability is deteriorating, as can be seen in the rest of the table. As an example, when there is a difference of 1 million, our best value increases, but the execution time decreases. As a result, we could not reach a clear conclusion with the inconsistent process of the random operator.
