@@ -16,28 +16,30 @@ public class Main {
     private static int knapsackCapacity = 300;
 
     // Define the solution state variables
-    private static boolean[] currentSolution; // solution 0-1'lerden oluşan
+    private static boolean[] currentSolution;
     private static boolean[] bestSolution;
-    private static int currentValue; // current OFV
+    private static int currentValue;
     private static int bestValue;
     private static boolean[] solutionSol;
     private static int solutionValue;;
 
     public static void main(String[] args) {
-        long startTime = System.currentTimeMillis();
+        long startTime = System.currentTimeMillis(); // startTime variable for measuring execution time
 
         // Initialize the solution state variables
         currentSolution = new boolean[values.length];
         bestSolution = new boolean[values.length];
         solutionSol = new boolean[values.length];
         currentValue = 0;
-        bestValue = 0; // new OFV gibi
+        bestValue = 0;
         solutionValue = 0;
+
         // Initialize the random number generator
         Random random = new Random();
 
         // Start the simulated annealing process
         double currentTemperature = MAX_TEMPERATURE;
+
         // Randomly initialize the current solution
         for (int i = 0; i < currentSolution.length; i++) {
             currentSolution[i] = random.nextBoolean(); // Randomly assign true or false
@@ -56,7 +58,7 @@ public class Main {
                     currentSolution[i] = !currentSolution[i]; // Flip the value of the item
                 }
             }
-            currentValue = calculateValue(currentSolution); // bu arrayin valuesu hesaplandı
+            currentValue = calculateValue(currentSolution);
             solutionValue = currentValue;
             for (int i = 0; i < currentSolution.length; i++) {
                 solutionSol[i] = currentSolution[i];
@@ -65,24 +67,24 @@ public class Main {
             double probability = calculateAcceptanceProbability(currentValue, solutionValue, currentTemperature);
 
             if (bestValue < currentValue) {
-                if (probability == 1) {
-                    bestValue = solutionValue; // new OFV
+                if (probability == 1) { // current>solution ofv
+                    bestValue = solutionValue;
 
                     for (int i = 0; i < solutionSol.length; i++) {
                         bestSolution[i] = solutionSol[i];
                     }
 
-                } else {
+                } else { // current<solution ofv
                     Double randomNumber = random.nextDouble();
 
                     if (probability > randomNumber) {
-                        bestValue = solutionValue;
+                        bestValue = solutionValue; // accept ise solution ofv yi tutuyoruz
 
                         for (int i = 0; i < solutionSol.length; i++) {
                             bestSolution[i] = solutionSol[i];
                         }
 
-                    } else {
+                    } else { // reject ise current ofv yi tutuyoruz
                         bestValue = currentValue;
                         for (int i = 0; i < currentSolution.length; i++) {
                             bestSolution[i] = currentSolution[i];
@@ -95,16 +97,17 @@ public class Main {
 
         // Print the best solution found
         System.out.println("Best Solution: " + Arrays.toString(bestSolution));
-        System.out.println("Best Value: " + bestValue);
+        System.out.println("Best Value: " + bestValue); // new ofv en son tutulan
+
         System.out.println("Differences between temperatures: " + (MAX_TEMPERATURE - currentTemperature));
-        long endTime = System.currentTimeMillis();
-        long executionTime = endTime - startTime;
+
+        long endTime = System.currentTimeMillis(); // endTime variable for measuring execution time
+        long executionTime = endTime - startTime; // Difference of start and end for execution time
         System.out.println("Working time: " + executionTime + " ms");
     }
 
     // Helper method to calculate the fitness value of a solution
-    private static int calculateValue(boolean[] solution) { // feasibility için solution'ın wightini toplar, uygunsa
-                                                            // value döndürür
+    private static int calculateValue(boolean[] solution) {
         int value = 0;
         int weight = 0;
         for (int i = 0; i < solution.length; i++) {
@@ -123,9 +126,9 @@ public class Main {
     // Helper method to calculate the acceptance probability of a neighbor solution
     private static double calculateAcceptanceProbability(int currentValue, int neighborValue, double temperature) {
         if (neighborValue > currentValue) {
-            return 1; // solution daha iyiyse 1 döndür
+            return 1; // If solution is better
         } else {
-            return Math.exp((neighborValue - currentValue) / temperature); // daha iyi değilse metropolis value
+            return Math.exp((neighborValue - currentValue) / temperature); // Metropolis value
         } // neighbor=solution OFV, current value=current OFV
     }
 }
