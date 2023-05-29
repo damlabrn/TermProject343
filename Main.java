@@ -44,10 +44,24 @@ public class Main {
         for (int i = 0; i < currentSolution.length; i++) {
             currentSolution[i] = random.nextBoolean(); // Randomly assign true or false
         }
-        currentValue = calculateValue(currentSolution);
-        bestValue = currentValue;
-        for (int i = 0; i < currentSolution.length; i++) {
-            bestSolution[i] = currentSolution[i];
+
+        if (calculateValue(currentSolution) == 0) { // Not feasible
+            while (calculateValue(currentSolution) == 0) {
+                for (int i = 0; i < currentSolution.length; i++) {
+                    currentSolution[i] = random.nextBoolean(); // Randomly assign true or false again
+                }
+                currentValue = calculateValue(currentSolution);
+                bestValue = currentValue;
+                for (int i = 0; i < currentSolution.length; i++) {
+                    bestSolution[i] = currentSolution[i];
+                }
+            }
+        } else { // Feasible
+            currentValue = calculateValue(currentSolution);
+            bestValue = currentValue;
+            for (int i = 0; i < currentSolution.length; i++) {
+                bestSolution[i] = currentSolution[i];
+            }
         }
 
         while (currentTemperature != 0) {
@@ -58,33 +72,33 @@ public class Main {
                     currentSolution[i] = !currentSolution[i]; // Flip the value of the item
                 }
             }
-            currentValue = calculateValue(currentSolution);
-            solutionValue = currentValue;
+            solutionValue = calculateValue(currentSolution);
             for (int i = 0; i < currentSolution.length; i++) {
                 solutionSol[i] = currentSolution[i];
             }
 
             double probability = calculateAcceptanceProbability(currentValue, solutionValue, currentTemperature);
 
-            if (bestValue < currentValue) {
-                if (probability == 1) { // current>solution ofv
+            if (currentValue < solutionValue) { // Better and Accept
+                if (probability == 1) { // Current OFV > Solution OFV
                     bestValue = solutionValue;
 
                     for (int i = 0; i < solutionSol.length; i++) {
                         bestSolution[i] = solutionSol[i];
                     }
 
-                } else { // current<solution ofv
+                } // Not Better
+                else { // Current OFV < Solution OFV
                     Double randomNumber = random.nextDouble();
 
-                    if (probability > randomNumber) {
-                        bestValue = solutionValue; // accept ise solution ofv yi tutuyoruz
+                    if (probability > randomNumber) { // Accept
+                        bestValue = solutionValue;
 
                         for (int i = 0; i < solutionSol.length; i++) {
                             bestSolution[i] = solutionSol[i];
                         }
 
-                    } else { // reject ise current ofv yi tutuyoruz
+                    } else { // Reject
                         bestValue = currentValue;
                         for (int i = 0; i < currentSolution.length; i++) {
                             bestSolution[i] = currentSolution[i];
@@ -92,12 +106,13 @@ public class Main {
                     }
                 }
             }
-            currentTemperature = currentTemperature * COOLING_RATE; // new temperature
+            currentTemperature = currentTemperature * COOLING_RATE; // New temperature
+            currentValue = bestValue; // Updated New OFV to be Current OFV
         }
 
         // Print the best solution found
         System.out.println("Best Solution: " + Arrays.toString(bestSolution));
-        System.out.println("Best Value: " + bestValue); // new ofv en son tutulan
+        System.out.println("Best Value: " + bestValue);
 
         System.out.println("Differences between temperatures: " + (MAX_TEMPERATURE - currentTemperature));
 
@@ -126,9 +141,9 @@ public class Main {
     // Helper method to calculate the acceptance probability of a neighbor solution
     private static double calculateAcceptanceProbability(int currentValue, int neighborValue, double temperature) {
         if (neighborValue > currentValue) {
-            return 1; // If solution is better
+            return 1; // Better
         } else {
             return Math.exp((neighborValue - currentValue) / temperature); // Metropolis value
-        } // neighbor=solution OFV, current value=current OFV
+        }
     }
 }
